@@ -64,7 +64,7 @@ class GameOfLife
     // Clear the console grid display
     private void ClearGrid()
     {
-        for (int heightC = height; heightC > 0; heightC--)
+        for (int heightC = height; heightC >= 0; heightC--)
         {
             Console.SetCursorPosition(0, 0 + heightC);
             Console.Write(new string(' ', width));
