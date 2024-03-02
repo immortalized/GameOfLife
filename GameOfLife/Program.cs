@@ -106,7 +106,7 @@ class GameOfLife
         generationCount++;
         aliveCellCount = 0;
 
-        int[,] newLives = new int[height, width];
+        newLives = (int[,])lives.Clone();
 
         for (int i = 0; i < Lives.GetLength(0); i++)
         {
