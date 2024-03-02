@@ -1,7 +1,8 @@
 class GameOfLife
 {
     private Random random = new Random();
-    private int[,] Lives;
+    private int[,] lives;
+    private int[,] newLives;
     private int width, height;
     private int generationCount;
     private string printBuffer;
@@ -11,7 +12,8 @@ class GameOfLife
     {
         this.width = width;
         this.height = height;
-        Lives = new int[height, width];
+        lives = new int[height, width];
+        newLives = new int[height, width];
 
         if (path == null)
         {
@@ -28,11 +30,11 @@ class GameOfLife
 
     private void InitializeRandomState()
     {
-        for (int i = 0; i < Lives.GetLength(0); i++)
+        for (int i = 0; i < height; i++)
         {
-            for (int j = 0; j < Lives.GetLength(1); j++)
+            for (int j = 0; j < width; j++)
             {
-                Lives[i, j] = random.Next(100) < 15 ? 1 : 0;
+                lives[i, j] = random.Next(100) < 15 ? 1 : 0;
             }
         }
     }
@@ -45,13 +47,13 @@ class GameOfLife
             string line = sr.ReadLine();
             for (int i = line.IndexOf('1'); i > -1; i = line.IndexOf('1', i + 1))
             {
-                Lives[lineIndex, i] = 1;
+                lives[lineIndex, i] = 1;
             }
             lineIndex++;
         }
     }
 
-    private void Clear()
+    private void ClearGrid()
     {
         for (int heightC = height; heightC > 0; heightC--)
         {
@@ -74,7 +76,7 @@ class GameOfLife
                 int ni = i + x;
                 int nj = j + y;
 
-                if (ni >= 0 && ni < height && nj >= 0 && nj < width && Lives[ni, nj] == 1)
+                if (ni >= 0 && ni < height && nj >= 0 && nj < width && lives[ni, nj] == 1)
                 {
                     neighbours++;
                 }
@@ -84,37 +86,37 @@ class GameOfLife
         return neighbours;
     }
 
-    private void Visualize()
+    private void VisualizeGeneration()
     {
         printBuffer = $"Conway's Game of Life (C#) | Generation: {generationCount} | Cells alive: {aliveCellCount}\n\n";
 
-        for (int i = 0; i < Lives.GetLength(0); i++)
+        for (int i = 0; i < lives.GetLength(0); i++)
         {
-            for (int j = 0; j < Lives.GetLength(1); j++)
+            for (int j = 0; j < lives.GetLength(1); j++)
             {
-                printBuffer += (Lives[i, j] == 1) ? "█" : " ";
+                printBuffer += (lives[i, j] == 1) ? "█" : " ";
             }
             printBuffer += "\n";
         }
 
-        Clear();
+        ClearGrid();
         Console.WriteLine(printBuffer);
     }
 
-    private void Update()
+    private void UpdateGeneration()
     {
         generationCount++;
         aliveCellCount = 0;
 
         newLives = (int[,])lives.Clone();
 
-        for (int i = 0; i < Lives.GetLength(0); i++)
+        for (int i = 0; i < lives.GetLength(0); i++)
         {
-            for (int j = 0; j < Lives.GetLength(1); j++)
+            for (int j = 0; j < lives.GetLength(1); j++)
             {
                 int neighbours = GetAliveNeighbors(i, j);
 
-                if (Lives[i, j] == 1)
+                if (lives[i, j] == 1)
                 {
                     newLives[i, j] = (neighbours == 2 || neighbours == 3) ? 1 : 0;
                 }
@@ -127,15 +129,15 @@ class GameOfLife
             }
         }
 
-        Lives = newLives;
+        lives = newLives;
     }
 
-    public void RunSimulation(int delay, bool manualStep)
+    public void Simulate(int delay, bool manualStep)
     {
         while (true)
         {
-            Visualize();
-            Update();
+            VisualizeGeneration();
+            UpdateGeneration();
             Thread.Sleep(delay);
 
             if (manualStep)
