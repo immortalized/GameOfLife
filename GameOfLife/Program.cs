@@ -5,6 +5,7 @@ class GameOfLife
     private int width, height;
     private int generationCount;
     private string printBuffer;
+    private int aliveCellCount = 0;
 
     public GameOfLife(int width, int height, string path = null)
     {
@@ -20,16 +21,7 @@ class GameOfLife
         {
             using (StreamReader sr = new StreamReader(path))
             {
-                int lineIndex = 0;
-                while (!sr.EndOfStream)
-                {
-                    string line = sr.ReadLine();
-                    for (int i = line.IndexOf('1'); i > -1; i = line.IndexOf('1', i + 1))
-                    {
-                        Lives[lineIndex, i] = 1;
-                    }
-                    lineIndex++;
-                }
+                InitializeFromFile(sr);
             }
         }
     }
@@ -42,6 +34,20 @@ class GameOfLife
             {
                 Lives[i, j] = random.Next(100) < 15 ? 1 : 0;
             }
+        }
+    }
+
+    private void InitializeFromFile(StreamReader sr)
+    {
+        int lineIndex = 0;
+        while (!sr.EndOfStream)
+        {
+            string line = sr.ReadLine();
+            for (int i = line.IndexOf('1'); i > -1; i = line.IndexOf('1', i + 1))
+            {
+                Lives[lineIndex, i] = 1;
+            }
+            lineIndex++;
         }
     }
 
@@ -80,7 +86,7 @@ class GameOfLife
 
     private void Visualize()
     {
-        printBuffer = $"Conway's Game of Life (C#) | Generation: {generationCount}\n\n";
+        printBuffer = $"Conway's Game of Life (C#) | Generation: {generationCount} | Cells alive: {aliveCellCount}\n\n";
 
         for (int i = 0; i < Lives.GetLength(0); i++)
         {
@@ -98,6 +104,7 @@ class GameOfLife
     private void Update()
     {
         generationCount++;
+        aliveCellCount = 0;
 
         int[,] newLives = new int[height, width];
 
@@ -115,6 +122,8 @@ class GameOfLife
                 {
                     newLives[i, j] = (neighbours == 3) ? 1 : 0;
                 }
+
+                aliveCellCount += newLives[i, j];
             }
         }
 
