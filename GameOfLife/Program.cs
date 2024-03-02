@@ -1,11 +1,16 @@
 class GameOfLife
 {
     private Random random = new Random();
+
     private int[,] grid;
     private int[,] originalGrid;
+
     private int width, height;
+
     private int generationCount;
+
     private string printBuffer;
+
     private int aliveCellCount = 0;
 
     public GameOfLife(int width, int height, string path = null)
@@ -15,6 +20,7 @@ class GameOfLife
         grid = new int[height, width];
         originalGrid = new int[height, width];
 
+        // Initialize the grid either randomly or from a file
         if (path == null)
         {
             InitializeRandomState();
@@ -28,17 +34,19 @@ class GameOfLife
         }
     }
 
+    // Initialize the grid with random live (1) and dead (0) cells
     private void InitializeRandomState()
     {
         for (int i = 0; i < height; i++)
         {
             for (int j = 0; j < width; j++)
             {
-                grid[i, j] = random.Next(100) < 15 ? 1 : 0;
+                grid[i, j] = random.Next(100) < 15 ? 1 : 0; // Approximately 15% chance of a cell being alive
             }
         }
     }
 
+    // Initialize the grid from a file specified by the StreamReader
     private void InitializeFromFile(StreamReader sr)
     {
         int lineIndex = 0;
@@ -53,6 +61,7 @@ class GameOfLife
         }
     }
 
+    // Clear the console grid display
     private void ClearGrid()
     {
         for (int heightC = height; heightC > 0; heightC--)
@@ -63,6 +72,7 @@ class GameOfLife
         Console.SetCursorPosition(0, 0);
     }
 
+    // Count the number of alive neighbors around a specific cell in the grid
     private int GetAliveNeighbors(int[,] grid, int i, int j)
     {
         int neighbours = 0;
@@ -86,6 +96,7 @@ class GameOfLife
         return neighbours;
     }
 
+    // Visualize the current generation's grid on the console
     private void VisualizeGeneration()
     {
         printBuffer = $"Conway's Game of Life (C#) | Generation: {generationCount} | Cells alive: {aliveCellCount}\n\n";
@@ -103,12 +114,13 @@ class GameOfLife
         Console.WriteLine(printBuffer);
     }
 
+    // Update the current generation based on the rules of Conway's Game of Life
     private void UpdateGeneration()
     {
         generationCount++;
         aliveCellCount = 0;
 
-        originalGrid = (int[,])grid.Clone();
+        originalGrid = (int[,])grid.Clone(); // Create a copy of the current grid for calculating the next generation
 
         for (int i = 0; i < grid.GetLength(0); i++)
         {
@@ -130,6 +142,7 @@ class GameOfLife
         }
     }
 
+    // Simulate the Game of Life with a specified delay between generations and optional manual step
     public void Simulate(int delay, bool manualStep)
     {
         while (true)
