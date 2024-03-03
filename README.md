@@ -3,12 +3,12 @@ Basic C# console implementation of Conway's Game Of Life.
 ## Usage
 ### With randomized initializtion
 ```C#
-GameOfLife gol = new GameOfLife(200, 50);
+GameOfLife gol = new GameOfLife(200, 50, 4);
 gol.Simulate(70, false);
 ```
 ### With a prewritten pattern
 ```C#
-GameOfLife gol = new GameOfLife(200, 50, "gosper_glider_gun.txt");
+GameOfLife gol = new GameOfLife(200, 50, 4, "gosper_glider_gun.txt");
 gol.Simulate(70, false);
 ```
 #### Example pattern (Gosper glider gun)
