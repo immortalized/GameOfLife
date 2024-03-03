@@ -1,21 +1,21 @@
 class GameOfLife
 {
+    private Stopwatch genTimer = new Stopwatch();
+
     private Random random = new Random();
+
+    private StringBuilder printBuffer = new StringBuilder();
 
     private int[,] grid;
     private int[,] originalGrid;
 
-    private short cellSize = 4;
+    private short cellSize;
 
     private int width, height;
 
     private int generationCount;
 
-    private StringBuilder printBuffer = new StringBuilder();
-
     private int aliveCellCount = 0;
-
-    Stopwatch genTimer = new Stopwatch();
 
     public GameOfLife(int width, int height, short cellSize, string path = null)
     {
@@ -23,7 +23,7 @@ class GameOfLife
         this.height = height;
         grid = new int[height, width];
         originalGrid = new int[height, width];
-        this.cellSize = Math.Max(this.cellSize, cellSize);
+        this.cellSize = cellSize;
 
         // Initialize the grid either randomly or from a file
         if (path == null)
@@ -112,6 +112,8 @@ class GameOfLife
     // Update the current generation based on the rules of Conway's Game of Life
     private void UpdateGeneration()
     {
+        Console.CursorVisible = false; // To prevent annoying cursor flickering
+
         genTimer.Reset();
         genTimer.Start();
 
