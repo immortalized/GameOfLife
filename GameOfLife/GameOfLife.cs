@@ -5,20 +5,25 @@ class GameOfLife
     private int[,] grid;
     private int[,] originalGrid;
 
+    private short cellSize = 4;
+
     private int width, height;
 
     private int generationCount;
 
-    private string printBuffer;
+    private StringBuilder printBuffer = new StringBuilder();
 
     private int aliveCellCount = 0;
 
-    public GameOfLife(int width, int height, string path = null)
+    Stopwatch genTimer = new Stopwatch();
+
+    public GameOfLife(int width, int height, short cellSize, string path = null)
     {
         this.width = width;
         this.height = height;
         grid = new int[height, width];
         originalGrid = new int[height, width];
+        this.cellSize = Math.Max(this.cellSize, cellSize);
 
         // Initialize the grid either randomly or from a file
         if (path == null)
@@ -61,17 +66,6 @@ class GameOfLife
         }
     }
 
-    // Clear the console grid display
-    private void ClearGrid()
-    {
-        for (int heightC = height; heightC >= 0; heightC--)
-        {
-            Console.SetCursorPosition(0, 0 + heightC);
-            Console.Write(new string(' ', width));
-        }
-        Console.SetCursorPosition(0, 0);
-    }
-
     // Count the number of alive neighbors around a specific cell in the grid
     private int GetAliveNeighbors(int[,] grid, int i, int j)
     {
@@ -99,30 +93,34 @@ class GameOfLife
     // Visualize the current generation's grid on the console
     private void VisualizeGeneration()
     {
-        printBuffer = $"Conway's Game of Life (C#) | Generation: {generationCount} | Cells alive: {aliveCellCount}\n\n";
+        printBuffer.Clear();
+        printBuffer.AppendLine($"Conway's Game of Life (C#) | Generation: {generationCount} | Cells alive: {aliveCellCount} | Time took to generate: {genTimer.ElapsedMilliseconds} ms          \n");
 
         for (int i = 0; i < grid.GetLength(0); i++)
         {
             for (int j = 0; j < grid.GetLength(1); j++)
             {
-                printBuffer += (grid[i, j] == 1) ? "█" : " ";
+                printBuffer.Append((grid[i, j] == 1) ? "█" : " ");
             }
-            printBuffer += "\n";
+            printBuffer.AppendLine();
         }
 
-        ClearGrid();
-        Console.WriteLine(printBuffer);
+        Console.SetCursorPosition(0, 0);
+        Console.Write(printBuffer.ToString());
     }
 
     // Update the current generation based on the rules of Conway's Game of Life
     private void UpdateGeneration()
     {
+        genTimer.Reset();
+        genTimer.Start();
+
         generationCount++;
         aliveCellCount = 0;
 
         originalGrid = (int[,])grid.Clone(); // Create a copy of the current grid for calculating the next generation
 
-        for (int i = 0; i < grid.GetLength(0); i++)
+        Parallel.For(0, grid.GetLength(0), i =>
         {
             for (int j = 0; j < grid.GetLength(1); j++)
             {
@@ -137,14 +135,17 @@ class GameOfLife
                     grid[i, j] = (neighbours == 3) ? 1 : 0;
                 }
 
-                aliveCellCount += grid[i, j];
+                Interlocked.Add(ref aliveCellCount, grid[i, j]); // Use Interlocked to safely update aliveCellCount
             }
-        }
+        });
+
+        genTimer.Stop();
     }
 
     // Simulate the Game of Life with a specified delay between generations and optional manual step
     public void Simulate(int delay, bool manualStep)
     {
+        ConsoleHelper.SetCurrentFont("Consolas", cellSize);
         while (true)
         {
             VisualizeGeneration();
