@@ -12,6 +12,7 @@ GameOfLife gol = new GameOfLife(200, 100, 4, "gosper_glider_gun.txt");
 gol.Simulate(30, false);
 ```
 #### Example pattern (Gosper glider gun)
+(1 represents a living cell, anything else is a dead one)
 ```
 
                          1
