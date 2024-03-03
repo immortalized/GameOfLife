@@ -11,6 +11,7 @@ gol.Simulate(0, false);
 GameOfLife gol = new GameOfLife(200, 100, 4, "gosper_glider_gun.txt");
 gol.Simulate(30, false);
 ```
+### Note that you can't really go higher than a couple hundred thousand total cells, because even StringBuilder is slow to render more than that.
 #### Example pattern (Gosper glider gun)
 (1 represents a living cell, anything else is a dead one)
 ```
