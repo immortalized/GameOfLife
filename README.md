@@ -26,6 +26,6 @@ gol.Simulate(70, false);
 ```
 ## Showcase
 ### Randomized initialization
-![](https://github.com/immortalized/GameOfLife/blob/main/Other/randomized.gif)
+![]()
 ### Gosper glider gun (prewritten pattern)
-![](https://github.com/immortalized/GameOfLife/blob/main/Other/glidergun.gif)
+![]()
