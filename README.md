@@ -13,7 +13,7 @@ gol.Simulate(30, false);
 ```
 ### ⚠️Note that you can't really go higher than a couple hundred thousand total cells, because even StringBuilder is slow to render more than that.⚠️
 #### Example pattern (Gosper glider gun)
-(1 represents a living cell, anything else is a dead one)
+(1 represents a living cell, anything else a dead one)
 ```
 
                          1
