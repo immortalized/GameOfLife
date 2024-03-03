@@ -1,5 +1,5 @@
 # GameOfLife
-Basic console implementation of Conway's Game Of Life.
+Basic C# console implementation of Conway's Game Of Life.
 ## Usage
 ### With randomized initializtion
 ```C#
