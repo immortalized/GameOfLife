@@ -94,7 +94,7 @@ class GameOfLife
     private void VisualizeGeneration()
     {
         printBuffer.Clear();
-        printBuffer.AppendLine($"Conway's Game of Life (C#) | Generation: {generationCount} | Cells alive: {aliveCellCount} | Time took to generate: {genTimer.ElapsedMilliseconds} ms          \n");
+        printBuffer.AppendLine($"Conway's Game of Life (C#, Console) | Generation: {generationCount} | Grid cells: {grid.Length} - Live cells: {aliveCellCount} | Time took to generate: {genTimer.ElapsedMilliseconds} ms          \n");
 
         for (int i = 0; i < grid.GetLength(0); i++)
         {
