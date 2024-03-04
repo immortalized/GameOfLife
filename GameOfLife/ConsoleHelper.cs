@@ -1,3 +1,6 @@
+using System;
+using System.Runtime.InteropServices;
+
 public static class ConsoleHelper
 {
     private const int FixedWidthTrueType = 54;
