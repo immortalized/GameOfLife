@@ -9,7 +9,7 @@ gol.Simulate(0, false);
 ### With a prewritten pattern
 ```C#
 GameOfLife gol = new GameOfLife(950, 250, "pattern.txt");
-gol.Simulate(30, false);
+gol.Simulate(0, false);
 ```
 #### Example pattern (Gosper glider gun)
 ```
