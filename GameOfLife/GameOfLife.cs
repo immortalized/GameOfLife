@@ -8,9 +8,7 @@ using System.Threading.Tasks;
 class GameOfLife
 {
     private Stopwatch genTimer = new Stopwatch();
-
     private Random random = new Random();
-
     private StringBuilder printBuffer = new StringBuilder();
 
     private int[,] grid;
@@ -76,26 +74,20 @@ class GameOfLife
     // Count the number of alive neighbors around a specific cell in the grid
     private int GetAliveNeighbors(int[,] grid, int i, int j)
     {
-        int neighbours = 0;
-        int ni, nj;
+        int aliveNeighbors = 0;
 
-        for (int x = -1; x <= 1; x++)
+        for (int ni = i - 1; ni <= i + 1; ni++)
         {
-            for (int y = -1; y <= 1; y++)
+            for (int nj = j - 1; nj <= j + 1; nj++)
             {
-                if (x == 0 && y == 0) continue;
-
-                ni = i + x;
-                nj = j + y;
-
-                if (ni >= 0 && ni < height && nj >= 0 && nj < width && grid[ni, nj] == 1)
+                if (ni >= 0 && ni < height && nj >= 0 && nj < width && (ni != i || nj != j) && grid[ni, nj] == 1)
                 {
-                    neighbours++;
+                    aliveNeighbors++;
                 }
             }
         }
 
-        return neighbours;
+        return aliveNeighbors;
     }
 
     // Visualize the current generation's grid on the console
@@ -104,9 +96,9 @@ class GameOfLife
         printBuffer.Clear();
         printBuffer.AppendLine($"Conway's Game of Life (C#, Console) | Generation: {generationCount} | Grid cells: {grid.Length} - Live cells: {aliveCellCount} | Time took to generate: {genTimer.ElapsedMilliseconds} ms          \n");
 
-        for (int i = 0; i < grid.GetLength(0); i++)
+        for (int i = 0; i < height; i++)
         {
-            for (int j = 0; j < grid.GetLength(1); j++)
+            for (int j = 0; j < width; j++)
             {
                 printBuffer.Append((grid[i, j] == 1) ? "█" : " ");
             }
@@ -121,7 +113,6 @@ class GameOfLife
     // Update the current generation based on the rules of Conway's Game of Life
     private void UpdateGeneration()
     {
-
         Console.CursorVisible = false; // To prevent annoying cursor flickering
 
         genTimer.Reset();
@@ -132,9 +123,9 @@ class GameOfLife
 
         originalGrid = (int[,])grid.Clone(); // Create a copy of the current grid for calculating the next generation
 
-        Parallel.For(0, grid.GetLength(0), i =>
+        Parallel.For(0, height, i =>
         {
-            for (int j = 0; j < grid.GetLength(1); j++)
+            for (int j = 0; j < width; j++)
             {
                 int neighbours = GetAliveNeighbors(originalGrid, i, j);
 
