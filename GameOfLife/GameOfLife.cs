@@ -1,11 +1,11 @@
 using System;
-using System.Diagnostics;
 using System.IO;
 using System.Text;
 using System.Threading;
+using System.Diagnostics;
 using System.Threading.Tasks;
 
-class Life
+class GameOfLife
 {
     private Stopwatch genTimer = new Stopwatch();
 
@@ -24,7 +24,7 @@ class Life
 
     private int aliveCellCount = 0;
 
-    public Life(int width, int height, short cellSize, string path = null)
+    public GameOfLife(int width, int height, short cellSize, string path = null)
     {
         this.width = width;
         this.height = height;
@@ -114,7 +114,8 @@ class Life
         }
 
         Console.SetCursorPosition(0, 0);
-        Console.Write(printBuffer.ToString());
+        FastConsole.Write(printBuffer.ToString());
+        FastConsole.Flush();
     }
 
     // Update the current generation based on the rules of Conway's Game of Life
@@ -159,7 +160,7 @@ class Life
         ConsoleHelper.SetCurrentFont("Consolas", cellSize);
         while (true)
         {
-            VisualizeGeneration();
+            VisualizeGeneration(); // Wait for the asynchronous operation to complete
             UpdateGeneration();
             Thread.Sleep(delay);
 
