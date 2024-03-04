@@ -7,6 +7,14 @@ using System.Threading.Tasks;
 
 class GameOfLife
 {
+    [DllImport("kernel32.dll", ExactSpelling = true)]
+    private static extern IntPtr GetConsoleWindow();
+    private static IntPtr ConsoleWindow = GetConsoleWindow();
+
+    [DllImport("user32.dll", CharSet = CharSet.Auto, SetLastError = true)]
+    private static extern bool ShowWindow(IntPtr hWnd, int nCmdShow);
+    private const int MAXIMIZE = 3;
+
     private Stopwatch genTimer = new Stopwatch();
     private Random random = new Random();
     private StringBuilder printBuffer = new StringBuilder();
@@ -149,6 +157,7 @@ class GameOfLife
     public void Simulate(int delay, bool manualStep)
     {
         ConsoleHelper.SetCurrentFont("Consolas", cellSize);
+        ShowWindow(ConsoleWindow, MAXIMIZE);
         while (true)
         {
             VisualizeGeneration(); // Wait for the asynchronous operation to complete
