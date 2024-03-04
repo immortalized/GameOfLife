@@ -25,7 +25,7 @@ gol.Simulate(30, false);
 .............OO......................
 ```
 ## Showcase
-### Randomized init
+### Randomized initialization
 ![](https://github.com/immortalized/GameOfLife/blob/main/Showcase/randomizedinit.gif)
 ### Breeder 1
 ![](https://github.com/immortalized/GameOfLife/blob/main/Showcase/breeder_1.gif)
