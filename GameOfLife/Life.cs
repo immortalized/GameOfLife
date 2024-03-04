@@ -5,7 +5,7 @@ using System.Text;
 using System.Threading;
 using System.Threading.Tasks;
 
-class GameOfLife
+class Life
 {
     private Stopwatch genTimer = new Stopwatch();
 
@@ -24,7 +24,7 @@ class GameOfLife
 
     private int aliveCellCount = 0;
 
-    public GameOfLife(int width, int height, short cellSize, string path = null)
+    public Life(int width, int height, short cellSize, string path = null)
     {
         this.width = width;
         this.height = height;
@@ -77,6 +77,7 @@ class GameOfLife
     private int GetAliveNeighbors(int[,] grid, int i, int j)
     {
         int neighbours = 0;
+        int ni, nj;
 
         for (int x = -1; x <= 1; x++)
         {
@@ -84,8 +85,8 @@ class GameOfLife
             {
                 if (x == 0 && y == 0) continue;
 
-                int ni = i + x;
-                int nj = j + y;
+                ni = i + x;
+                nj = j + y;
 
                 if (ni >= 0 && ni < height && nj >= 0 && nj < width && grid[ni, nj] == 1)
                 {
@@ -119,6 +120,7 @@ class GameOfLife
     // Update the current generation based on the rules of Conway's Game of Life
     private void UpdateGeneration()
     {
+
         Console.CursorVisible = false; // To prevent annoying cursor flickering
 
         genTimer.Reset();
