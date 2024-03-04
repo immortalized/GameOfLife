@@ -1,3 +1,10 @@
+using System;
+using System.Diagnostics;
+using System.IO;
+using System.Text;
+using System.Threading;
+using System.Threading.Tasks;
+
 class GameOfLife
 {
     private Stopwatch genTimer = new Stopwatch();
