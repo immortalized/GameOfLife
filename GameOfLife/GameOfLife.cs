@@ -22,21 +22,18 @@ class GameOfLife
     private int[,] grid;
     private int[,] originalGrid;
 
-    private short cellSize;
-
     private int width, height;
 
     private int generationCount;
 
     private int aliveCellCount = 0;
 
-    public GameOfLife(int width, int height, short cellSize, string path = null)
+    public GameOfLife(int width, int height, string path = null)
     {
         this.width = width;
         this.height = height;
         grid = new int[height, width];
         originalGrid = new int[height, width];
-        this.cellSize = cellSize;
 
         // Initialize the grid either randomly or from a file
         if (path == null)
@@ -71,7 +68,7 @@ class GameOfLife
         while (!sr.EndOfStream)
         {
             string line = sr.ReadLine();
-            for (int i = line.IndexOf('1'); i > -1; i = line.IndexOf('1', i + 1))
+            for (int i = line.IndexOf('O'); i > -1; i = line.IndexOf('O', i + 1))
             {
                 grid[lineIndex, i] = 1;
             }
