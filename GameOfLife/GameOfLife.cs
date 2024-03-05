@@ -1,10 +1,3 @@
-using System;
-using System.IO;
-using System.Text;
-using System.Threading;
-using System.Diagnostics;
-using System.Threading.Tasks;
-
 class GameOfLife
 {
     [DllImport("kernel32.dll", ExactSpelling = true)]
@@ -68,10 +61,19 @@ class GameOfLife
         while (!sr.EndOfStream)
         {
             string line = sr.ReadLine();
-            for (int i = line.IndexOf('O'); i > -1; i = line.IndexOf('O', i + 1))
+
+            for (int i = 0; i < line.Length; i++)
             {
-                grid[lineIndex, i] = 1;
+                if (line[i] == 'O')
+                {
+                    grid[lineIndex, i] = 1;
+                }
+                else if (line[i] == '.')
+                {
+                    grid[lineIndex, i] = 0;
+                }
             }
+
             lineIndex++;
         }
     }
@@ -153,7 +155,7 @@ class GameOfLife
     // Simulate the Game of Life with a specified delay between generations and optional manual step
     public void Simulate(int delay, bool manualStep)
     {
-        ConsoleHelper.SetCurrentFont("Consolas", cellSize);
+        ConsoleHelper.SetCurrentFont("Consolas", 2);
         ShowWindow(ConsoleWindow, MAXIMIZE);
         while (true)
         {
