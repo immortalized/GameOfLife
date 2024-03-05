@@ -53,14 +53,19 @@ class GameOfLife
     private void InitializeFromFile(StreamReader sr)
     {
         int index = 0;
-        while (!sr.EndOfStream)
+        int lineIndex = 0;
+
+        while (!sr.EndOfStream && index < width * height)
         {
             string line = sr.ReadLine();
 
-            for (int i = 0; i < line.Length; i++)
+            for (int i = line.IndexOf('O'); i > -1 && index < width * height; i = line.IndexOf('O', i + 1))
             {
-                grid[index++] = (line[i] == 'O') ? 1 : 0;
+                grid[lineIndex * width + i] = 1;
+                index++;
             }
+
+            lineIndex++;
         }
     }
 
