@@ -72,19 +72,22 @@ class GameOfLife
     private int GetAliveNeighbors(int[] grid, int index)
     {
         int aliveNeighbors = 0;
-
-        int[] neighborOffsets = { -width - 1, -width, -width + 1, -1, 1, width - 1, width, width + 1 };
-
-        foreach (int offset in neighborOffsets)
+        int i = index / width;
+        int j = index % width;
+    
+        for (int ni = -1; ni <= 1; ni++)
         {
-            int neighborIndex = index + offset;
-
-            if (neighborIndex >= 0 && neighborIndex < width * height && grid[neighborIndex] == 1)
+            for (int nj = -1; nj <= 1; nj++)
             {
-                aliveNeighbors++;
+                int neighborIndex = (i + ni) * width + (j + nj);
+    
+                if (neighborIndex != index && neighborIndex >= 0 && neighborIndex < width * height && grid[neighborIndex] == 1)
+                {
+                    aliveNeighbors++;
+                }
             }
         }
-
+    
         return aliveNeighbors;
     }
 
