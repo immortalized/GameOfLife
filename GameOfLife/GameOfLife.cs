@@ -23,9 +23,9 @@ class GameOfLife
 
     public GameOfLife(int width, int height, string path = null)
     {
-        this.width = width;
-        this.height = height;
-        grid = new int[width * height];
+        this.width = width + 2;
+        this.height = height + 2;
+        grid = new int[this.width * this.height];
         originalGrid = new int[width * height];
 
         // Initialize the grid either randomly or from a file
@@ -46,25 +46,30 @@ class GameOfLife
     {
         for (int i = 0; i < width * height; i++)
         {
-            grid[i] = random.Next(100) < 15 ? 1 : 0; // Approximately 15% chance of a cell being alive
+            //if not (i < width or i > width*height - width or i % width == 0 or i % width == 11)
+            if (!(i < width || i > width * height - width || i % width == 0 || i % width == width - 1))
+            {
+                grid[i] = random.Next(100) < 15 ? 1 : 0; // Approximately 15% chance of a cell being alive
+            }
+            else
+            {
+                grid[i] = 0;
+            }
         }
     }
 
     private void InitializeFromFile(StreamReader sr)
     {
-        int index = 0;
-        int lineIndex = 0;
+        int lineIndex = 1;
 
-        while (!sr.EndOfStream && index < width * height)
+        while (!sr.EndOfStream && lineIndex < height)
         {
             string line = sr.ReadLine();
 
-            for (int i = line.IndexOf('O'); i > -1 && index < width * height; i = line.IndexOf('O', i + 1))
+            for (int i = line.IndexOf('O'); i > -1 && i < width * height; i = line.IndexOf('O', i + 1))
             {
-                grid[lineIndex * width + i] = 1;
-                index++;
+                grid[lineIndex * width + i + 1] = 1;
             }
-
             lineIndex++;
         }
     }
@@ -74,20 +79,21 @@ class GameOfLife
         int aliveNeighbors = 0;
         int i = index / width;
         int j = index % width;
-    
+
         for (int ni = -1; ni <= 1; ni++)
         {
             for (int nj = -1; nj <= 1; nj++)
             {
                 int neighborIndex = (i + ni) * width + (j + nj);
-    
+
+                // Check if the neighbor index is valid and not the current cell
                 if (neighborIndex != index && neighborIndex >= 0 && neighborIndex < width * height && grid[neighborIndex] == 1)
                 {
                     aliveNeighbors++;
                 }
             }
         }
-    
+
         return aliveNeighbors;
     }
 
@@ -98,11 +104,17 @@ class GameOfLife
 
         for (int i = 0; i < height; i++)
         {
-            for (int j = 0; j < width; j++)
+            if (i > 0 && i < height)
             {
-                printBuffer.Append((grid[i * width + j] == 1) ? "█" : " ");
+                for (int j = 0; j < width; j++)
+                {
+                    if (j > 0 && j < width)
+                    {
+                        printBuffer.Append((grid[i * width + j] == 1) ? "█" : " ");
+                    }
+                }
+                printBuffer.AppendLine();
             }
-            printBuffer.AppendLine();
         }
 
         Console.SetCursorPosition(0, 0);
@@ -123,21 +135,21 @@ class GameOfLife
 
         Parallel.For(0, width * height, index =>
         {
-            int i = index / width;
-            int j = index % width;
-
-            int neighbours = GetAliveNeighbors(originalGrid, index);
-
-            if (originalGrid[index] == 1)
+            if (!(index < width || index > width * height - width || index % width == 0 || index % width == width - 1))
             {
-                grid[index] = (neighbours == 2 || neighbours == 3) ? 1 : 0;
-            }
-            else
-            {
-                grid[index] = (neighbours == 3) ? 1 : 0;
-            }
+                int neighbours = GetAliveNeighbors(originalGrid, index);
 
-            Interlocked.Add(ref aliveCellCount, grid[index]);
+                if (originalGrid[index] == 1)
+                {
+                    grid[index] = (neighbours == 2 || neighbours == 3) ? 1 : 0;
+                }
+                else
+                {
+                    grid[index] = (neighbours == 3) ? 1 : 0;
+                }
+
+                Interlocked.Add(ref aliveCellCount, grid[index]);
+            }
         });
 
         genTimer.Stop();
