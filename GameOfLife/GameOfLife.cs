@@ -102,19 +102,13 @@ class GameOfLife
         printBuffer.Clear();
         printBuffer.AppendLine($"Conway's Game of Life (C#, Console) | Generation: {generationCount} | Grid cells: {grid.Length} - Live cells: {aliveCellCount} | Time took to generate: {genTimer.ElapsedMilliseconds} ms          \n");
 
-        for (int i = 0; i < height; i++)
+        for (int i = 1; i < height - 1; i++)
         {
-            if (i > 0 && i < height)
+            for (int j = 1; j < width - 1; j++)
             {
-                for (int j = 0; j < width; j++)
-                {
-                    if (j > 0 && j < width)
-                    {
-                        printBuffer.Append((grid[i * width + j] == 1) ? "█" : " ");
-                    }
-                }
-                printBuffer.AppendLine();
+                printBuffer.Append((grid[i * width + j] == 1) ? "█" : " ");
             }
+            printBuffer.AppendLine();
         }
 
         Console.SetCursorPosition(0, 0);
