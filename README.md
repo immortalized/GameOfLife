@@ -26,7 +26,7 @@ gol.Simulate(0, false);
 ```
 ## Showcase
 ### Randomized initialization
-![](https://github.com/immortalized/GameOfLife/blob/main/Showcase/randomizedinit.gif)
+![](https://github.com/immortalized/GameOfLife/blob/main/Showcase/randomized_Init.gif)
 ### Breeder 1
 ![](https://github.com/immortalized/GameOfLife/blob/main/Showcase/breeder_1.gif)
 ### Spacefiller collapse
